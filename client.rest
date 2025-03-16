@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:3000
+
+# RECADOS
+### Lista todos os recados
+GET {{baseUrl}}/recados/
+?limit=10
+&offset=0
+### Lista apenas um recado
+GET {{baseUrl}}/recados/2
+### Cria um recado
+POST {{baseUrl}}/recados
+Content-Type: application/json
+
+{
+    "texto": "Novo Recado",
+    "de": "Joana",
+    "para": "João"
+}
+### Atualiza um recado
+PATCH {{baseUrl}}/recados/2
+Content-Type: application/json
+
+{
+    "texto": "Recado Atualizado",
+    "lido": true
+}
+### Apaga um recado
+DELETE {{baseUrl}}/recados/1
+
+
+#
+
+
+# PESSOAS
+### Lista todas as pessoas
+GET {{baseUrl}}/pessoas/
+?limit=10
+&offset=0
+### Lista apenas uma pessoa
+GET {{baseUrl}}/pessoas/2
+### Cria uma pessoa
+POST {{baseUrl}}/pessoas
+Content-Type: application/json
+
+{
+    "email": "john.doe@gmail.com",
+    "password": "123456",
+    "nome": "John Doe"
+}
+### Atualiza uma pessoa
+PATCH {{baseUrl}}/pessoas/5
+Content-Type: application/json
+
+{
+    "password": "654321",
+    "nome": "Dohn Joe"
+}
+### Apaga uma pessoa
+DELETE {{baseUrl}}/pessoas/1
+
+
+#
+
+
+### AppControllerGetHello
+
+# @name AppControllerGetHello
+GET {{baseUrl}}/home/hello
+
+### ExemploDeRota
+
+# @name ExemploDeRota
+GET {{baseUrl}}/home/exemplo
+
+### ConceitosManualController Home
+
+# @name ConceitosManualControllerHome
+GET {{baseUrl}}/conceitos-manual
+
+### ConceitosAutomaticoController Home
+
+# @name ConceitosAutomaticoControllerHome
+GET {{baseUrl}}/conceitos-automatico
