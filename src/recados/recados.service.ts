@@ -23,7 +23,24 @@ export class RecadosService {
     // Precisamos usar async await porque o find nos retorna uma Promise do JavaScript, ou seja, nesse método estou aguardando ele ir
     // na base de dados pegar todos os recados me retornar eles para dentro da minha variável
     // Se retornarmos diretamente a Promise o NestJS resolve ela pra gente e não precisamos usar async await
-    const recados = await this.recadoRepository.find();
+    // Quando queremos buscar alguma coisa que tem uma relação vou lá no meu método e falo que quero que ele traga as relations
+    const recados = await this.recadoRepository.find({
+      relations: ['de', 'para'],
+      order: {
+        id: 'desc', // Do mais recente para o mais antigo
+      },
+      // Quais campos do relacionamento quero exibir
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
+    });
     return recados;
   }
 
@@ -35,6 +52,17 @@ export class RecadosService {
       where: {
         id,
       },
+      relations: ['de', 'para'],
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
     });
 
     if (recado) {
@@ -45,19 +73,34 @@ export class RecadosService {
   }
 
   async create(createRecadoDto: CreateRecadoDto) {
+    const { deId, paraId } = createRecadoDto;
     // Encontrar a pessoa que está criando o recado
+    const de = await this.pessoasService.findOne(deId);
     // Encontrar a pessoa que está recebendo o recado
+    const para = await this.pessoasService.findOne(paraId);
     // Porque se eu não achar a pessoa que está enviando e nem a pessoa que está recebendo não preciso continuar a criação
     // de um novo recado
 
     const novoRecado = {
-      ...createRecadoDto,
+      texto: createRecadoDto.texto,
+      de,
+      para,
       lido: false,
       data: new Date(),
     };
 
     const recado = this.recadoRepository.create(novoRecado);
-    return this.recadoRepository.save(recado);
+    await this.recadoRepository.save(recado);
+
+    return {
+      ...recado,
+      de: {
+        id: recado.de.id,
+      },
+      para: {
+        id: recado.para.id,
+      },
+    };
   }
 
   async update(id: number, updateRecadoDto: UpdateRecadoDto) {

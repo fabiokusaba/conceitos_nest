@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateRecadoDto {
   // Geralmente é uma boa prática de programação você colocar um 'readonly' porque você não quer alterar os dados do dto
@@ -14,4 +20,10 @@ export class CreateRecadoDto {
   @IsBoolean()
   @IsDate()*/
   readonly texto: string;
+
+  @IsPositive()
+  deId: number; // Quem está criando o recado
+
+  @IsPositive()
+  paraId: number; // Quem está recebendo o recado
 }
