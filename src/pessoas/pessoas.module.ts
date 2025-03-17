@@ -7,6 +7,9 @@ import { Pessoa } from './entities/pessoa.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Pessoa])],
   controllers: [PessoasController],
+  // Os providers são para uso interno do módulo
   providers: [PessoasService],
+  // Quero exportar o serviço da Pessoa para outros módulos da minha aplicação, uso externo
+  exports: [PessoasService],
 })
 export class PessoasModule {}
